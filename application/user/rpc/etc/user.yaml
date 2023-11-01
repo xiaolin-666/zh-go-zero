@@ -1,0 +1,11 @@
+Name: user.rpc
+ListenOn: 0.0.0.0:8080
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: user.rpc
+DataSource: root:root@tcp(127.0.0.1:3306)/zhgozero_user?parseTime=true
+RedisCli:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node
