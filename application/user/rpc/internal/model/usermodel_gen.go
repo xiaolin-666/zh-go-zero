@@ -47,6 +47,7 @@ type (
 		Mobile     string    `db:"mobile"`      // 手机号
 		CreateTime time.Time `db:"create_time"` // 创建时间
 		UpdateTime time.Time `db:"update_time"` // 最后修改时间
+		Password   string    `db:"password"`    // 密码
 	}
 )
 
@@ -120,8 +121,8 @@ func (m *defaultUserModel) Insert(ctx context.Context, data *User) (sql.Result, 
 	zhgozeroUserUserIdKey := fmt.Sprintf("%s%v", cacheZhgozeroUserUserIdPrefix, data.Id)
 	zhgozeroUserUserMobileKey := fmt.Sprintf("%s%v", cacheZhgozeroUserUserMobilePrefix, data.Mobile)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, userRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Username, data.Avatar, data.Mobile)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Username, data.Avatar, data.Mobile, data.Password)
 	}, zhgozeroUserUserIdKey, zhgozeroUserUserMobileKey)
 	return ret, err
 }
@@ -136,7 +137,7 @@ func (m *defaultUserModel) Update(ctx context.Context, newData *User) error {
 	zhgozeroUserUserMobileKey := fmt.Sprintf("%s%v", cacheZhgozeroUserUserMobilePrefix, data.Mobile)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.Username, newData.Avatar, newData.Mobile, newData.Id)
+		return conn.ExecCtx(ctx, query, newData.Username, newData.Avatar, newData.Mobile, newData.Password, newData.Id)
 	}, zhgozeroUserUserIdKey, zhgozeroUserUserMobileKey)
 	return err
 }

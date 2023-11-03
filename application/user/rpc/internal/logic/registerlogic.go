@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"time"
+	"zh-go-zero/application/user/rpc/internal/model"
 
 	"zh-go-zero/application/user/rpc/internal/svc"
 	"zh-go-zero/application/user/rpc/service"
@@ -24,7 +26,22 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(in *service.RegisterRequest) (*service.RegisterResponse, error) {
-	// todo: add your logic here and delete this line
-
-	return &service.RegisterResponse{}, nil
+	ret, err := l.svcCtx.UserModel.Insert(l.ctx, &model.User{
+		Username:   in.GetUsername(),
+		Avatar:     in.GetAvatar(),
+		Mobile:     in.GetMobile(),
+		Password:   in.GetPassword(),
+		CreateTime: time.Now(),
+		UpdateTime: time.Now(),
+	})
+	if err != nil {
+		return nil, err
+	}
+	id, err := ret.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+	return &service.RegisterResponse{
+		UserId: id,
+	}, nil
 }

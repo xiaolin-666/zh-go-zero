@@ -36,3 +36,8 @@ func getVerificationCode(rds *redis.Redis, mobile string) (code string, err erro
 	code, err = rds.Get(prefixActivation + mobile)
 	return code, err
 }
+
+func deleteVerificationCode(rds *redis.Redis, mobile string) error {
+	_, err := rds.Del(prefixActivation + mobile)
+	return err
+}
