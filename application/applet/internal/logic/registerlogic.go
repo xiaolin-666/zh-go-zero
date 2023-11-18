@@ -63,7 +63,6 @@ func (l *RegisterLogic) Register(req *types.RegisterRequest) (resp *types.Regist
 	if u.GetUserId() > 0 {
 		return nil, code.MobileHasRegistered
 	}
-
 	regRet, err := l.svcCtx.UserRpc.Register(l.ctx, &user.RegisterRequest{
 		Mobile:   req.Mobile,
 		Username: req.Name,

@@ -27,8 +27,8 @@ message FindByMobileRequest {
 
 message FindByMobileResponse {
   int64 userId = 1;
-  string mobile = 2;
-  string username = 3;
+  string username = 2;
+  string mobile = 3;
   string avatar = 4;
 }
 

@@ -2,6 +2,7 @@ package encrypt
 
 import (
 	"crypto/md5"
+	"encoding/base64"
 	"encoding/hex"
 	"github.com/zeromicro/go-zero/core/codec"
 )
@@ -12,7 +13,11 @@ const (
 )
 
 func EncMobile(mobile string) (string, error) {
-	return codec.EcbEncryptBase64(mobileAesKey, mobile)
+	encrypt, err := codec.EcbEncrypt([]byte(mobileAesKey), []byte(mobile))
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(encrypt), nil
 }
 
 func EncPasswd(passwd string) string {
