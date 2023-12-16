@@ -33,6 +33,18 @@ func (c Code) Error() string {
 	return strconv.Itoa(c.code)
 }
 
+func String(s string) Code {
+	if len(s) == 0 {
+		return OK
+	}
+
+	code, err := strconv.Atoi(s)
+	if err != nil {
+		return ServerErr
+	}
+	return Code{code: code}
+}
+
 func New(code int, msg string) Code {
 	return Code{code: code, msg: msg}
 }

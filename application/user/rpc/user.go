@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"zh-go-zero/pkg/interceptors"
 
 	"zh-go-zero/application/user/rpc/internal/config"
 	"zh-go-zero/application/user/rpc/internal/server"
@@ -33,6 +34,7 @@ func main() {
 		}
 	})
 	defer s.Stop()
+	s.AddUnaryInterceptors(interceptors.ServerErrorInterceptor())
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()

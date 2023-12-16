@@ -5,6 +5,7 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 	"zh-go-zero/application/applet/internal/config"
 	"zh-go-zero/application/user/rpc/user"
+	"zh-go-zero/pkg/interceptors"
 )
 
 type ServiceContext struct {
@@ -14,9 +15,12 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
+	// 自定义client拦截器
+	userRpc := zrpc.MustNewClient(c.UserRpc, zrpc.WithUnaryClientInterceptor(interceptors.ClientErrorInterceptor()))
+
 	return &ServiceContext{
 		Config:   c,
-		UserRpc:  user.NewUser(zrpc.MustNewClient(c.UserRpc)),
+		UserRpc:  user.NewUser(userRpc),
 		RedisCli: redis.MustNewRedis(c.RedisCli),
 	}
 }
