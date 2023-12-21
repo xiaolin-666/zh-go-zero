@@ -2,6 +2,9 @@ package logic
 
 import (
 	"context"
+	"time"
+	"zh-go-zero/application/article/rpc/internal/model"
+	"zh-go-zero/application/user/rpc/types"
 
 	"zh-go-zero/application/article/rpc/internal/svc"
 	"zh-go-zero/application/article/rpc/service"
@@ -24,7 +27,25 @@ func NewPublishArticleLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Pu
 }
 
 func (l *PublishArticleLogic) PublishArticle(in *service.PublishArticleRequest) (*service.PublishArticleResponse, error) {
-	// todo: add your logic here and delete this line
-
-	return &service.PublishArticleResponse{}, nil
+	result, err := l.svcCtx.ArticleModel.Insert(l.ctx, &model.Article{
+		Title:       in.Title,
+		Description: in.Description,
+		Content:     in.Content,
+		AuthorId:    in.UserId,
+		Cover:       in.Cover,
+		PublishTime: time.Now(),
+		CreateTime:  time.Now(),
+		UpdateTime:  time.Now(),
+		Status:      types.ArticleStatusVisible,
+	})
+	if err != nil {
+		l.Logger.Errorf("publish insert req: %v error: %v", in, err)
+		return nil, err
+	}
+	artId, err := result.LastInsertId()
+	if err != nil {
+		l.Logger.Errorf("LastInsertId error: %v", err)
+		return nil, err
+	}
+	return &service.PublishArticleResponse{ArticleId: artId}, nil
 }
