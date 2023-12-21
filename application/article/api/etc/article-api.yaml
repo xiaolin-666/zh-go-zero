@@ -1,0 +1,21 @@
+Name: article-api
+Host: 0.0.0.0
+Port: 9090
+Auth:
+  AccessSecret: kldsmdlmsmdsllds
+  AccessExpire: 604800
+  RefreshSecret: skoajmdnewklw
+  RefreshExpire: 2592000
+  RefreshAfter: 604800
+Oss:
+  Endpoint: oss-cn-beijing.aliyuncs.com
+  AccessKeyId: xxxxxxxxxxxxxxxxxxxxxxx
+  AccessKeySecret: xxxxxxxxxxxxxxxxxxxxxxx
+  BucketName: zh-go-zero-bucket
+ArticleRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: article.rpc
+    NonBlock: false
+

@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"database/sql"
 	"zh-go-zero/application/user/rpc/internal/svc"
 	"zh-go-zero/application/user/rpc/service"
 
@@ -24,12 +23,9 @@ func NewFindByMobileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Find
 }
 
 func (l *FindByMobileLogic) FindByMobile(in *service.FindByMobileRequest) (*service.FindByMobileResponse, error) {
-	u, err := l.svcCtx.UserModel.FindOneByMobile(l.ctx, in.Mobile)
-	switch {
-	case err == sql.ErrNoRows:
-		return &service.FindByMobileResponse{}, nil
-	case err != nil:
-		return &service.FindByMobileResponse{}, err
+	u, err := l.svcCtx.UserModel.FindByMobile(l.ctx, in.Mobile)
+	if err != nil {
+		return nil, err
 	}
 	if u == nil {
 		return &service.FindByMobileResponse{}, err

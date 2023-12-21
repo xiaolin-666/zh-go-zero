@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"errors"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"strings"
 	"zh-go-zero/application/applet/internal/code"
@@ -33,7 +32,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, err error) {
 	req.Mobile = strings.TrimSpace(req.Mobile)
 	if len(req.Mobile) == 0 {
-		return nil, code.RegisterMobileEmpty
+		return nil, code.LoginMobileEmpty
 	}
 	req.VerificationCode = strings.TrimSpace(req.VerificationCode)
 	if len(req.VerificationCode) == 0 {
@@ -74,16 +73,16 @@ func (l *LoginLogic) Login(req *types.LoginRequest) (resp *types.LoginResponse, 
 	}, nil
 }
 
-func checkVerificationCode(rds *redis.Redis, mobile string, code string) (err error) {
+func checkVerificationCode(rds *redis.Redis, mobile string, vCode string) (err error) {
 	cacheCode, err := getVerificationCode(rds, mobile)
 	if err != nil {
 		return err
 	}
 	if cacheCode == "" {
-		return errors.New("verification code expired")
+		return code.VerificationCodeExpired
 	}
-	if cacheCode != code {
-		return errors.New("verification code does not match")
+	if cacheCode != vCode {
+		return code.VerificationCodeNotMatch
 	}
 	return nil
 }

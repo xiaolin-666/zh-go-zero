@@ -97,7 +97,7 @@ func gRpcStatusFromXCode(code XCode) (*status.Status, error) {
 	default:
 		sts = Error(Code{code: code.Code(), msg: code.Message()})
 	}
-	stas := status.New(codes.OK, strconv.Itoa(sts.Code()))
+	stas := status.New(codes.Unknown, strconv.Itoa(sts.Code()))
 	return stas.WithDetails(sts.proto())
 }
 
@@ -124,7 +124,7 @@ func FromProto(pbMsg proto.Message) XCode {
 		if len(msg.Message) == 0 || msg.Message == strconv.FormatInt(int64(msg.Code), 10) {
 			return Code{code: int(msg.Code)}
 		}
-		return &Status{sts: msg}
+		return &Code{code: int(msg.Code), msg: msg.Message}
 	}
 
 	return ErrorF(ServerErr, "invalid proto message get %v", pbMsg)
