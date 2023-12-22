@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package service;
+option go_package = "./service";
+
+service Like {
+  rpc ThumbUp (ThumbUpRequest) returns (ThumbUpResponse);
+  rpc IsThumbUp (IsThumbUpRequest) returns (IsThumbUpResponse);
+}
+
+message ThumbUpRequest {
+  string bizId = 1; // 业务id
+  int64 objId = 2; // 对象id
+  int64 userId = 3; // 用户id
+  int32 likeType = 4; // 点赞类型
+}
+
+message ThumbUpResponse {
+  string bizId = 1; // 业务id
+  int64 objId = 2; // 对象id
+  int64 likeCount = 3; // 点赞数
+  int64 dislikeCount = 4; // 点踩数
+}
+
+message IsThumbUpRequest {
+  string bizId = 1; // 业务id
+  int64 objId = 2; // 对象id
+  int64 userId = 3; // 用户id
+}
+
+message IsThumbUpResponse {
+  map<int64, UserThumbUp> userThumbUps = 1;
+}
+
+message UserThumbUp {
+  int64 userId = 1;
+  int64 thumbUpTime = 2;
+  int32 likeType = 3;
+}
+
