@@ -1,5 +1,5 @@
 Name: article.rpc
-ListenOn: 0.0.0.0:8080
+ListenOn: 0.0.0.0:8090
 Etcd:
   Hosts:
   - 127.0.0.1:2379
@@ -9,3 +9,7 @@ CacheRedis:
   - Host: 127.0.0.1:6379
     Pass:
     Type: node
+BizRedis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node
