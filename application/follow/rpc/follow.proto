@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package service;
+option go_package = "./service";
+
+service Follow {
+  rpc Follow(FollowRequest) returns(FollowResponse);
+  rpc UnFollow(UnFollowRequest) returns(UnFollowResponse);
+  rpc FollowList(FollowListRequest) returns(FollowListResponse);
+  rpc FansList(FansListRequest) returns(FansListResponse);
+}
+
+message FollowRequest {
+  int64 userID = 1;
+  int64 followUserID = 2;
+}
+
+message FollowResponse {
+}
+
+message UnFollowRequest {
+  int64 userID = 1;
+  int64 FollowedUserID = 2;
+}
+
+message UnFollowResponse {
+}
+
+message FollowListRequest {
+  int64 id = 1;
+  int64 userID = 2;
+  int64 cursor = 3;
+  int64 pageSize = 4;
+}
+
+message FollowItem {
+  int64 id = 1;
+  int64 createTime = 2;
+}
+
+message FollowListResponse {
+  repeated FollowItem items = 1;
+  int64 cursor = 2;
+  bool isEnd = 3;
+  int64 id = 4;
+}
+
+message FansListRequest {
+  int64 id = 1;  // 标记当前粉丝id, 当分页中时, 粉丝数增加, cursor变化产生重复数据
+  int64 userID = 2;
+  int64 cursor = 3;
+  int64 pageSize = 4;
+}
+
+message FansItem {
+  int64 id = 1;
+  int64 createTime = 2;
+}
+
+message FansListResponse {
+  repeated FansItem items = 1;
+  int64 cursor = 2;
+  bool isEnd = 3;
+  int64 id = 4;
+}

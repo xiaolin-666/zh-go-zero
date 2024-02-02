@@ -50,7 +50,7 @@ func (l *ormLog) Trace(ctx context.Context, begin time.Time, fc func() (sql stri
 	logx.WithContext(ctx).WithDuration(elapsed).Infof(utils.FileWithLineNum(), float64(elapsed.Nanoseconds())/1e6, rows, sql)
 }
 
-func NewMysqlDB(conf Config) (*gorm.DB, error) {
+func NewMysqlDB(conf *Config) (*gorm.DB, error) {
 	if conf.MaxIdleConns == 0 {
 		conf.MaxIdleConns = 10
 	}
@@ -82,7 +82,7 @@ func NewMysqlDB(conf Config) (*gorm.DB, error) {
 	return db, nil
 }
 
-func MustMysqlDB(conf Config) *gorm.DB {
+func MustMysqlDB(conf *Config) *gorm.DB {
 	db, err := NewMysqlDB(conf)
 	if err != nil {
 		panic(err)
